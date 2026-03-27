@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S. — Agência Vertex</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--g:#1a7a3a;--g2:#0d5a28;--g3:#2aaa5a;--bg:#060910;--s1:#0a0f0a;--s2:#0d120d;--border:rgba(26,122,58,0.15);--border2:rgba(26,122,58,0.3);--text:#c8e8c8;--muted:rgba(200,232,200,0.4);--dim:rgba(26,122,58,0.35)}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;height:100vh}
+
+/* GRID + SCAN */
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.scanline{position:fixed;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(26,122,58,0.4),transparent);animation:scan 4s linear infinite;z-index:1;pointer-events:none}
+@keyframes scan{0%{top:-1px}100%{top:100vh}}
+.corner{position:fixed;width:44px;height:44px;opacity:0.35;z-index:1;pointer-events:none}
+.ctl{top:14px;left:14px;border-top:1px solid var(--g);border-left:1px solid var(--g)}
+.ctr{top:14px;right:14px;border-top:1px solid var(--g);border-right:1px solid var(--g)}
+.cbl{bottom:14px;left:14px;border-bottom:1px solid var(--g);border-left:1px solid var(--g)}
+.cbr{bottom:14px;right:14px;border-bottom:1px solid var(--g);border-right:1px solid var(--g)}
+
+/* SCREENS */
+.screen{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s ease}
+.screen.off{opacity:0;pointer-events:none}
+
+/* BOOT */
+#boot .content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
+.hex-wrap{position:relative;margin-bottom:28px}
+.ring{position:absolute;border:1px solid rgba(26,122,58,0.18);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+.r1{width:120px;height:120px;animation:rP 3s ease 1s infinite}
+.r2{width:158px;height:158px;animation:rP 3s ease 1.7s infinite}
+@keyframes rP{0%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}50%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.3)}}
+.hex{width:80px;height:80px;background:linear-gradient(135deg,var(--g),var(--g2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;animation:hexA 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s both,hexG 2s ease 1.3s infinite alternate}
+@keyframes hexA{from{transform:scale(0.3) rotate(-30deg);opacity:0}to{transform:scale(1) rotate(0deg);opacity:1}}
+@keyframes hexG{from{box-shadow:0 0 30px rgba(26,122,58,0.3)}to{box-shadow:0 0 70px rgba(26,122,58,0.65)}}
+.hex span{font-family:'Orbitron',sans-serif;font-size:30px;font-weight:900;color:#fff}
+.btitle{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--g);letter-spacing:6px;animation:fU 0.6s ease 0.8s both;margin-bottom:4px;text-shadow:0 0 20px rgba(26,122,58,0.4)}
+.bsub{font-family:'Orbitron',sans-serif;font-size:9px;color:var(--dim);letter-spacing:3px;animation:fU 0.6s ease 1s both;margin-bottom:32px}
+.bbar-w{width:220px;animation:fU 0.6s ease 1.2s both}
+.bbar-l{display:flex;justify-content:space-between;font-size:9px;letter-spacing:2px;color:var(--dim);margin-bottom:6px;font-family:'Orbitron',sans-serif}
+.bbar{height:1px;background:rgba(26,122,58,0.12);overflow:hidden}
+.bfill{height:100%;background:linear-gradient(90deg,var(--g2),var(--g),var(--g3));width:0;transition:width 0.5s ease}
+@keyframes fU{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* MODE SELECT */
+#modesel .box{background:rgba(6,9,16,0.96);border:0.5px solid var(--border2);border-radius:12px;padding:32px 28px;width:100%;max-width:400px;position:relative;z-index:2}
+#modesel .mhex{width:44px;height:44px;background:linear-gradient(135deg,var(--g),var(--g2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+#modesel .mhex span{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#fff}
+#modesel h2{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:var(--g);letter-spacing:3px;text-align:center;margin-bottom:6px}
+#modesel p{font-size:11px;color:var(--muted);text-align:center;letter-spacing:1px;margin-bottom:24px}
+.mode-btn{width:100%;padding:12px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all 0.2s;margin-bottom:10px}
+.mode-full{background:linear-gradient(135deg,var(--g),var(--g2));border:none;color:#fff}
+.mode-full:hover{box-shadow:0 0 20px rgba(26,122,58,0.4);transform:scale(1.01)}
+.mode-demo{background:transparent;border:0.5px solid var(--border2);color:var(--dim)}
+.mode-demo:hover{border-color:var(--g);color:var(--g)}
+.mode-sep{font-size:9px;color:var(--dim);text-align:center;letter-spacing:2px;margin:4px 0 10px;font-family:'Orbitron',sans-serif}
+
+/* PASSWORD */
+#pwscreen .box{background:rgba(6,9,16,0.96);border:0.5px solid var(--border2);border-radius:12px;padding:32px 28px;width:100%;max-width:380px;position:relative;z-index:2}
+#pwscreen h2{font-family:'Orbitron',sans-serif;font-size:10px;color:var(--g);letter-spacing:3px;text-align:center;margin-bottom:20px}
+.pw-inp{width:100%;padding:11px 14px;background:rgba(26,122,58,0.05);border:0.5px solid var(--border2);border-radius:6px;color:var(--text);font-size:14px;font-family:'Rajdhani',sans-serif;font-weight:500;letter-spacing:3px;outline:none;text-align:center;transition:all 0.2s;margin-bottom:10px}
+.pw-inp:focus{border-color:var(--g);box-shadow:0 0 15px rgba(26,122,58,0.1)}
+.pw-inp::placeholder{letter-spacing:1px;color:var(--dim)}
+.pw-btn{width:100%;padding:11px;background:linear-gradient(135deg,var(--g),var(--g2));border:none;border-radius:6px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all 0.2s}
+.pw-btn:hover{box-shadow:0 0 20px rgba(26,122,58,0.3);transform:scale(1.01)}
+.pw-err{font-size:10px;color:#ef4444;text-align:center;letter-spacing:1px;margin-top:8px;display:none;font-family:'Orbitron',sans-serif}
+
+/* DIALOG */
+#dialog .box{background:rgba(6,9,16,0.96);border:0.5px solid var(--border2);border-left:2px solid var(--g);border-radius:0 10px 10px 10px;padding:20px 22px;width:100%;max-width:460px;position:relative;z-index:2}
+#dialog .dhex-w{position:relative;margin:0 auto 24px;width:56px}
+#dialog .dhex{width:56px;height:56px;background:linear-gradient(135deg,var(--g),var(--g2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(26,122,58,0.35)}
+#dialog .dhex span{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#fff}
+.dtag{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:3px;color:var(--dim);margin-bottom:10px}
+.dtxt{font-size:15px;font-weight:500;color:var(--text);line-height:1.7;min-height:58px;font-family:'Rajdhani',sans-serif}
+.cur{display:inline-block;width:2px;height:16px;background:var(--g);margin-left:2px;vertical-align:middle;animation:curB 0.8s ease infinite}
+@keyframes curB{0%,100%{opacity:1}50%{opacity:0}}
+.irow{display:flex;gap:8px;margin-top:18px;opacity:0;transition:opacity 0.4s}
+.irow.show{opacity:1}
+.ni{flex:1;padding:11px 14px;background:rgba(26,122,58,0.05);border:0.5px solid var(--border2);border-radius:6px;color:var(--text);font-size:14px;font-family:'Rajdhani',sans-serif;font-weight:500;outline:none;transition:all 0.2s}
+.ni:focus{border-color:var(--g)}
+.ni::placeholder{color:var(--dim)}
+.cb{padding:11px 18px;background:linear-gradient(135deg,var(--g),var(--g2));border:none;border-radius:6px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all 0.2s}
+.cb:hover{box-shadow:0 0 15px rgba(26,122,58,0.3)}
+
+/* WELCOME */
+#welcome .content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center}
+.whex{width:70px;height:70px;background:linear-gradient(135deg,var(--g),var(--g2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:0 0 50px rgba(26,122,58,0.5);animation:hexG 2s ease infinite alternate}
+.whex span{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;color:#fff}
+.wtag{font-family:'Orbitron',sans-serif;font-size:9px;color:var(--dim);letter-spacing:3px;margin-bottom:10px}
+.wname{font-family:'Orbitron',sans-serif;font-size:32px;font-weight:900;color:var(--g);letter-spacing:6px;text-shadow:0 0 30px rgba(26,122,58,0.6);margin-bottom:20px}
+.wsub{font-size:12px;color:rgba(200,232,200,0.3);letter-spacing:2px;margin-bottom:32px}
+.wlog{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1px;color:var(--dim);text-align:left;width:340px}
+.logline{margin-bottom:5px;animation:fU 0.4s ease both}
+
+/* MAIN APP */
+#app{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.5s}
+#app.on{opacity:1;pointer-events:all}
+#hdr{padding:0 14px;height:46px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid var(--border);flex-shrink:0;background:var(--s1);position:relative;z-index:2}
+.lhx{width:26px;height:26px;background:linear-gradient(135deg,var(--g),var(--g2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lhx span{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:900;color:#fff}
+.lt1{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;color:var(--g);letter-spacing:2px}
+.lt2{font-size:8px;color:var(--dim);letter-spacing:1px;margin-top:1px}
+.hps{margin-left:auto;display:flex;gap:5px;align-items:center}
+.hp{padding:2px 7px;border-radius:3px;font-size:9px;font-weight:600;border:0.5px solid;font-family:'Rajdhani',sans-serif;letter-spacing:1px}
+.hpg{background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.25);color:#10b981}
+.hpr{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.25);color:#ef4444}
+.hpa{background:rgba(26,122,58,0.08);border-color:var(--border2);color:var(--g)}
+.ub{padding:2px 8px;background:rgba(26,122,58,0.08);border:0.5px solid var(--border2);border-radius:3px;font-size:9px;color:var(--g);letter-spacing:1px;font-weight:600;font-family:'Orbitron',sans-serif}
+
+/* DEMO BADGE */
+.demo-badge{background:rgba(250,159,23,0.12);border:0.5px solid rgba(250,159,23,0.3);color:#f59e0b;padding:2px 8px;border-radius:3px;font-size:9px;font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:1px}
+
+#tabs{display:flex;border-bottom:0.5px solid var(--border);flex-shrink:0;background:var(--s1);position:relative;z-index:2}
+.tb{padding:8px 12px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--dim);cursor:pointer;font-size:10px;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;transition:all 0.2s;text-transform:uppercase}
+.tb:hover{color:var(--g)}
+.tb.on{color:var(--g);border-bottom-color:var(--g);background:rgba(26,122,58,0.04)}
+#panels{flex:1;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);position:relative;z-index:2}
+.panel{display:none;flex:1;flex-direction:column;overflow:hidden}
+.panel.on{display:flex}
+#msgs{flex:1;overflow-y:auto;padding:12px}
+#msgs::-webkit-scrollbar{width:2px}
+#msgs::-webkit-scrollbar-thumb{background:rgba(26,122,58,0.2)}
+.ch{display:flex;flex-direction:column;gap:10px;max-width:680px;margin:0 auto}
+.msg{display:flex;gap:7px}
+.msg.u{justify-content:flex-end}
+.av{width:22px;height:22px;flex-shrink:0;background:linear-gradient(135deg,var(--g),var(--g2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;margin-top:2px}
+.av span{font-size:8px;font-weight:900;color:#fff;font-family:'Orbitron',sans-serif}
+.bub{max-width:82%;padding:9px 13px;font-size:12px;line-height:1.6;font-family:'Rajdhani',sans-serif}
+.bub.ai{background:rgba(26,122,58,0.05);border:0.5px solid var(--border);border-left:2px solid var(--g);border-radius:0 6px 6px 6px;color:var(--text)}
+.bub.u{background:rgba(26,122,58,0.09);border:0.5px solid var(--border2);border-radius:6px 6px 0 6px;color:var(--text)}
+.dots{display:flex;gap:4px;padding:9px 13px;background:rgba(26,122,58,0.05);border:0.5px solid var(--border);border-left:2px solid var(--g);border-radius:0 6px 6px 6px}
+.d{width:5px;height:5px;border-radius:50%;background:var(--g);animation:bl 1.4s ease infinite}
+.d:nth-child(2){animation-delay:.2s}.d:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:0.2}}
+#ia{padding:9px 12px;border-top:0.5px solid var(--border);flex-shrink:0;background:var(--s1);position:relative;z-index:2}
+.ir{max-width:680px;margin:0 auto;display:flex;gap:7px;align-items:flex-end}
+#inp{flex:1;padding:8px 11px;background:rgba(26,122,58,0.04);border:0.5px solid var(--border2);border-radius:4px;color:var(--text);font-size:12px;font-family:'Rajdhani',sans-serif;resize:none;line-height:1.4;outline:none;transition:border-color 0.2s}
+#inp:focus{border-color:var(--g)}
+#inp::placeholder{color:var(--dim)}
+#sb{width:34px;height:34px;flex-shrink:0;background:linear-gradient(135deg,var(--g),var(--g2));border:none;border-radius:4px;cursor:pointer;font-size:15px;color:#fff;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+#sb:hover:not(:disabled){transform:scale(1.05);box-shadow:0 0 15px rgba(26,122,58,0.3)}
+#sb:disabled{opacity:0.3;cursor:not-allowed}
+.ih{font-size:9px;color:var(--dim);text-align:center;margin-top:4px;letter-spacing:1px;font-family:'Rajdhani',sans-serif}
+
+/* DEMO LOCK OVERLAY */
+#dlock{position:absolute;inset:0;background:rgba(6,9,16,0.92);z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;backdrop-filter:blur(4px)}
+#dlock.on{display:flex}
+.dlock-box{background:rgba(6,9,16,0.98);border:0.5px solid var(--border2);border-radius:12px;padding:32px 28px;max-width:360px;text-align:center}
+.dlock-box .lhx2{width:44px;height:44px;background:linear-gradient(135deg,var(--g),var(--g2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.dlock-box .lhx2 span{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#fff}
+.dlock-box h3{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--g);letter-spacing:3px;margin-bottom:10px}
+.dlock-box p{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:22px}
+.cta-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--g),var(--g2));border:none;border-radius:6px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all 0.2s;margin-bottom:10px}
+.cta-btn:hover{box-shadow:0 0 25px rgba(26,122,58,0.45);transform:scale(1.02)}
+.cta-back{background:transparent;border:0.5px solid var(--border2);color:var(--dim);padding:10px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:9px;cursor:pointer;width:100%;letter-spacing:1px;transition:all 0.2s}
+.cta-back:hover{border-color:var(--g);color:var(--g)}
+
+/* TABS EXTRA */
+.psc{flex:1;overflow-y:auto;padding:14px}
+.pin{max-width:680px;margin:0 auto}
+.pt{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;color:var(--g);letter-spacing:3px;margin-bottom:14px;padding-bottom:8px;border-bottom:0.5px solid var(--border)}
+.emp{text-align:center;color:var(--dim);margin-top:40px;font-size:12px;letter-spacing:1px}
+.hint{margin-top:10px;padding:9px;background:rgba(26,122,58,0.04);border:0.5px dashed var(--border);border-radius:4px;text-align:center;font-size:10px;color:var(--dim)}
+.kg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:18px}
+.kc{padding:11px;background:rgba(26,122,58,0.04);border:0.5px solid var(--border);border-radius:4px;text-align:center}
+.kl{font-size:9px;letter-spacing:2px;margin-bottom:4px;color:var(--dim);font-weight:600}
+.kv{font-size:12px;font-weight:600;font-family:'Orbitron',sans-serif}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="scanline"></div>
+<div class="corner ctl"></div><div class="corner ctr"></div>
+<div class="corner cbl"></div><div class="corner cbr"></div>
+
+<!-- BOOT -->
+<div class="screen" id="boot">
+  <div class="content">
+    <div class="hex-wrap">
+      <div class="ring r1"></div><div class="ring r2"></div>
+      <div class="hex"><span>V</span></div>
+    </div>
+    <div class="btitle">AGÊNCIA VERTEX</div>
+    <div class="bsub">J.A.R.V.I.S. · COO SYSTEM</div>
+    <div class="bbar-w">
+      <div class="bbar-l"><span>INICIALIZANDO</span><span id="pct">0%</span></div>
+      <div class="bbar"><div class="bfill" id="bfill"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODE SELECT -->
+<div class="screen off" id="modesel">
+  <div class="box">
+    <div class="mhex" id="mhex" onclick="hexClick()" style="cursor:pointer;transition:all 0.2s"><span>V</span></div>
+    <h2>AGÊNCIA VERTEX</h2>
+    <p>Sistema J.A.R.V.I.S. disponível para demonstração</p>
+    <button class="mode-btn mode-demo" onclick="goDemo()">EXPLORAR DEMO GRATUITO</button>
+    <div style="font-size:9px;color:rgba(26,122,58,0.18);text-align:center;margin-top:8px;letter-spacing:1px;font-family:'Orbitron',sans-serif">AGÊNCIA VERTEX · COO SYSTEM</div>
+  </div>
+</div>
+
+<!-- PASSWORD -->
+<div class="screen off" id="pwscreen">
+  <div class="box">
+    <h2>ACESSO AUTORIZADO</h2>
+    <input class="pw-inp" type="password" id="pwinp" placeholder="Senha de acesso..." onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">CONFIRMAR</button>
+    <div class="pw-err" id="pwerr">Acesso negado. Tente novamente.</div>
+  </div>
+</div>
+
+<!-- DIALOG -->
+<div class="screen off" id="dialog">
+  <div class="box" style="max-width:460px;width:100%;margin:0 20px">
+    <div class="dhex-w"><div class="dhex"><span>V</span></div></div>
+    <div class="dtag">J.A.R.V.I.S. · COO · AGÊNCIA VERTEX</div>
+    <div class="dtxt" id="dtxt"><span class="cur"></span></div>
+    <div class="irow" id="irow">
+      <input class="ni" id="ninput" placeholder="Digite seu nome..." maxlength="30" onkeydown="if(event.key==='Enter')confirmar()">
+      <button class="cb" onclick="confirmar()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen off" id="welcome">
+  <div class="content">
+    <div class="whex"><span>V</span></div>
+    <div class="wtag">BEM-VINDO À AGÊNCIA VERTEX</div>
+    <div class="wname" id="wname"></div>
+    <div class="wsub" id="wsub">Sistema COO inicializado e calibrado</div>
+    <div class="wlog" id="wlog"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div id="hdr">
+    <div class="lhx"><span>V</span></div>
+    <div><div class="lt1">AGÊNCIA VERTEX</div><div class="lt2">J.A.R.V.I.S. COO · ONLINE</div></div>
+    <div class="hps">
+      <div class="demo-badge" id="demobadge" style="display:none">DEMO</div>
+      <div class="hp" id="ps" style="display:none">R$ 0</div>
+      <div class="hp hpa" id="ptk" style="display:none">0 tarefas</div>
+      <div class="ub" id="ub">CHEFE</div>
+    </div>
+  </div>
+  <div id="tabs">
+    <button class="tb on" onclick="sw('chat')" id="tb-chat">J.A.R.V.I.S</button>
+    <button class="tb" onclick="sw('tasks')" id="tb-tasks">Tarefas</button>
+    <button class="tb" onclick="sw('finance')" id="tb-finance">Financeiro</button>
+    <button class="tb" onclick="sw('projects')" id="tb-projects">Projetos</button>
+  </div>
+  <div id="panels">
+    <!-- CHAT -->
+    <div class="panel on" id="p-chat" style="position:relative">
+      <div id="msgs"><div class="ch" id="ch"></div></div>
+      <div id="ia">
+        <div class="ir">
+          <textarea id="inp" rows="2" placeholder="Comando para o J.A.R.V.I.S..."></textarea>
+          <button id="sb" onclick="send()">→</button>
+        </div>
+        <div class="ih">ENTER ENVIAR · SHIFT+ENTER NOVA LINHA</div>
+      </div>
+      <!-- DEMO LOCK -->
+      <div id="dlock">
+        <div class="dlock-box">
+          <div class="lhx2"><span>V</span></div>
+          <h3>DIAGNÓSTICO INCOMPLETO</h3>
+          <p>Você viu o J.A.R.V.I.S. arranhando a superfície.<br><br>O diagnóstico real — copy, tráfego, financeiro, estratégia integrados — só existe na versão completa.<br><br>Se você sentiu que tem mais problema do que imaginava, confie nessa sensação.</p>
+          <button class="cta-btn" onclick="ctaClick()">QUERO O COMPLETO ↗</button>
+          <button class="cta-back" onclick="document.getElementById('dlock').classList.remove('on')">← VOLTAR AO DEMO</button>
+        </div>
+      </div>
+    </div>
+    <!-- TASKS -->
+    <div class="panel" id="p-tasks">
+      <div class="psc"><div class="pin">
+        <div class="pt">GESTÃO DE TAREFAS</div>
+        <div id="tl"><div class="emp">Nenhuma tarefa cadastrada.</div></div>
+      </div></div>
+    </div>
+    <!-- FINANCE -->
+    <div class="panel" id="p-finance">
+      <div class="psc"><div class="pin">
+        <div class="pt">NÚCLEO FINANCEIRO</div>
+        <div class="kg" id="kg"></div>
+        <div id="fl"></div>
+        <div class="hint">Fale com o J.A.R.V.I.S. para registrar transações</div>
+      </div></div>
+    </div>
+    <!-- PROJECTS -->
+    <div class="panel" id="p-projects">
+      <div class="psc"><div class="pin">
+        <div class="pt">PIPELINE DE PROJETOS</div>
+        <div id="pjl"><div class="emp">Nenhum projeto cadastrado.</div></div>
+        <div class="hint">Fale com o J.A.R.V.I.S. para adicionar projetos</div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────
+const SENHA = 'vertex2025';
+const CTA_LINK = 'https://wa.me/5538999999999?text=Quero+o+J.A.R.V.I.S.+completo';
+const MEM_KEY = 'jarvis_vertex_mem';
+
+// ── STATE ────────────────────────────────────────────
+let MODE='';
+let USER_NAME='';
+let IS_RETURNING=false;
+let demoMsgs=0;
+const DEMO_LIMIT=5;
+let S={tasks:[],fin:[],loading:false};
+
+// ── MEMÓRIA ──────────────────────────────────────────
+function saveMem(){
+  if(MODE!=='full')return;
+  const msgs=[];
+  document.querySelectorAll('#ch .msg').forEach(m=>{
+    const role=m.classList.contains('u')?'user':'ai';
+    const txt=m.querySelector('.bub')?.innerText||'';
+    if(txt) msgs.push({role,txt:txt.substring(0,300)});
+  });
+  const mem={
+    name:USER_NAME,
+    lastSeen:new Date().toLocaleDateString('pt-BR'),
+    lastTime:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
+    msgCount:(loadMem()?.msgCount||0)+msgs.length,
+    lastMsgs:msgs.slice(-10)
+  };
+  try{localStorage.setItem(MEM_KEY,JSON.stringify(mem));}catch(e){}
+}
+
+function loadMem(){
+  try{const d=localStorage.getItem(MEM_KEY);return d?JSON.parse(d):null;}catch(e){return null;}
+}
+
+function clearMem(){
+  try{localStorage.removeItem(MEM_KEY);}catch(e){}
+}
+
+// ── DEMO RESPOSTAS PRÉ-PROGRAMADAS ───────────────────
+const DEMO_RESPONSES=[
+  {
+    keys:['copy','texto','anuncio','criativo','vsl','roteiro'],
+    res:`Diagnóstico iniciado.\n\n**O PROBLEMA REAL** — 90% dos criativos que não convertem não têm problema de tráfego. Têm problema de copy. A mensagem não conecta com a dor certa, na hora certa, para a pessoa certa.\n\n**O QUE ESTÁ ACONTECENDO NO SEU CASO** — Sem ver o seu criativo, já posso apontar os 3 erros mais comuns: Hook genérico que não para o scroll. Benefício no lugar de transformação. CTA que pede demais sem remover o risco.\n\n**O QUE O COMPLETO FAZ** — Com o J.A.R.V.I.S. completo, eu analiso o seu criativo atual, identifico exatamente onde ele quebra, e reescrevo com o método RMBC — o mesmo usado nas campanhas de 8 dígitos. Gancho, mecanismo único, prova, oferta.\n\nUma pergunta: você já tem um criativo rodando ou precisa criar do zero?\n\n[COPY]→[DIAGNÓSTICO REAL]→[VERSÃO COMPLETA RESOLVE ISSO]`
+  },
+  {
+    keys:['cliente','captar','prospectar','vender','fechar','lead'],
+    res:`Diagnóstico de captação iniciado.\n\n**O PROBLEMA REAL** — Falta de cliente não é problema de mercado. É problema de posicionamento. Se você está brigando por preço, está no nicho errado ou com a proposta errada.\n\n**ANÁLISE RÁPIDA** — Me diz: você tem clareza de quem é o cliente ideal? Qual a dor específica que você resolve? Qual o resultado mensurável que você entrega?\n\nSem isso definido, qualquer estratégia de captação vai desperdiçar tempo e dinheiro.\n\n**O QUE O COMPLETO FAZ** — No J.A.R.V.I.S. completo, montamos juntos o seu ICP (perfil de cliente ideal), a proposta de valor cirúrgica e o script de abordagem que converte. Com esses 3 elementos, 30 prospecções ativas viram 2-3 clientes em menos de 30 dias.\n\nQual é o seu ticket médio hoje?\n\n[CAPTAÇÃO]→[POSICIONAMENTO PRIMEIRO]→[VERSÃO COMPLETA RESOLVE ISSO]`
+  },
+  {
+    keys:['tráfego','meta','google','ads','campanha','anúncio','impulsionar'],
+    res:`Diagnóstico de tráfego iniciado.\n\n**O PROBLEMA REAL** — A maioria das campanhas que não performam não têm problema de orçamento. Têm problema de estrutura. Você está pagando para testar no escuro.\n\n**AS 3 MÉTRICAS QUE IMPORTAM** — CTR acima de 2% (criativo funcionando). CPL dentro do seu CAC máximo. ROAS acima de 3x no e-commerce ou custo por lead qualificado no serviço.\n\nSe alguma dessas está fora, o problema está num lugar específico — e dá pra corrigir sem aumentar orçamento.\n\n**O QUE O COMPLETO FAZ** — No J.A.R.V.I.S. completo, analiso a estrutura completa da sua campanha, identifico o gargalo e monto o plano de ajuste com copy dos criativos incluída.\n\nMe diz: você está rodando para reconhecimento, geração de lead ou venda direta?\n\n[TRÁFEGO]→[DIAGNÓSTICO DE ESTRUTURA]→[VERSÃO COMPLETA RESOLVE ISSO]`
+  },
+  {
+    keys:['financeiro','dinheiro','receita','faturamento','caixa','lucro','cobrar','preço'],
+    res:`Diagnóstico financeiro iniciado.\n\n**O PROBLEMA REAL** — A maioria dos negócios que faturam pouco não têm problema de quantidade de clientes. Têm problema de ticket e margem. Você está entregando muito por pouco.\n\n**A CONTA QUE VOCÊ PRECISA FAZER** — Quanto tempo você gasta por cliente por mês? Multiplica pelo seu custo-hora real (salário desejado ÷ horas disponíveis). Esse é o seu custo mínimo de entrega. Está cobrando acima disso?\n\nA maioria descobre que está trabalhando no prejuízo sem saber.\n\n**O QUE O COMPLETO FAZ** — No J.A.R.V.I.S. completo, calculo sua margem real, defino o ticket mínimo viável e monto a oferta que justifica o preço premium sem perder cliente.\n\nQual é o seu ticket atual por cliente?\n\n[FINANCEIRO]→[MARGEM REAL]→[VERSÃO COMPLETA RESOLVE ISSO]`
+  },
+  {
+    keys:['estratégia','plano','crescer','escalar','agência','negócio','começar','meta'],
+    res:`Diagnóstico estratégico iniciado.\n\n**O PROBLEMA REAL** — Todo negócio que trava trava no mesmo ponto: o dono está operando no nível errado. Fazendo o trabalho que deveria delegar, tomando decisões que deveriam ser processos, resolvendo problemas que não deveriam existir.\n\n**OS 3 GARGALOS MAIS COMUNS** — Falta de processo (tudo depende de você). Falta de posicionamento (concorre por preço). Falta de previsibilidade (não sabe de onde vem o próximo cliente).\n\nQual desses três soa mais verdadeiro para o seu momento?\n\n**O QUE O COMPLETO FAZ** — No J.A.R.V.I.S. completo, montamos o diagnóstico completo do seu negócio, identificamos o gargalo principal e traçamos o plano de 90 dias para sair do caos e entrar em escala.\n\nMe conta: qual é o maior problema operacional que você enfrenta hoje?\n\n[ESTRATÉGIA]→[GARGALO IDENTIFICADO]→[VERSÃO COMPLETA RESOLVE ISSO]`
+  }
+];
+
+function getDemoResponse(msg){
+  const m=msg.toLowerCase();
+  for(const r of DEMO_RESPONSES){
+    if(r.keys.some(k=>m.includes(k))) return r.res;
+  }
+  return `Diagnóstico iniciado, ${USER_NAME||'Chefe'}.\n\n**ANÁLISE PRELIMINAR** — Recebi sua pergunta. Para dar um diagnóstico preciso, preciso entender melhor o contexto do seu negócio.\n\nMe diz: qual é o seu segmento, qual é o seu produto ou serviço, e qual é o principal obstáculo que está travando o crescimento agora?\n\nCom isso, consigo identificar o gargalo real — não a causa aparente.\n\n**O QUE O COMPLETO FAZ** — Na versão completa, tenho acesso ao histórico do seu negócio, posso cruzar dados de copy, tráfego, financeiro e estratégia para dar um diagnóstico integrado — não uma resposta isolada.\n\n[ANÁLISE]→[CONTEXTO NECESSÁRIO]→[VERSÃO COMPLETA É MAIS PRECISA]`;
+}
+
+// ── BOOT ──────────────────────────────────────────────
+const bsteps=[[0,0],[400,22],[900,50],[1500,75],[2100,93],[2700,100]];
+bsteps.forEach(([d,v])=>setTimeout(()=>{
+  document.getElementById('bfill').style.width=v+'%';
+  document.getElementById('pct').textContent=v+'%';
+},d+300));
+
+setTimeout(()=>{
+  fade('boot','off');
+  setTimeout(()=>fade('modesel','on'),600);
+},3600);
+
+// ── MODE SELECT ──────────────────────────────────────
+let hexClicks=0;let hexTimer=null;
+function hexClick(){
+  hexClicks++;
+  const h=document.getElementById('mhex');
+  h.style.transform='scale(1.15)';h.style.boxShadow='0 0 30px rgba(26,122,58,0.7)';
+  setTimeout(()=>{h.style.transform='scale(1)';h.style.boxShadow='';},200);
+  if(hexTimer)clearTimeout(hexTimer);
+  hexTimer=setTimeout(()=>{hexClicks=0;},800);
+  if(hexClicks>=3){
+    hexClicks=0;clearTimeout(hexTimer);
+    fade('modesel','off');
+    setTimeout(()=>fade('pwscreen','on'),600);
+  }
+}
+function goDemo(){
+  MODE='demo';
+  fade('modesel','off');
+  setTimeout(()=>startDialog(),600);
+}
+
+// ── PASSWORD ─────────────────────────────────────────
+function checkPw(){
+  const v=document.getElementById('pwinp').value;
+  if(v===SENHA){
+    MODE='full';
+    document.getElementById('pwerr').style.display='none';
+    fade('pwscreen','off');
+    const mem=loadMem();
+    if(mem&&mem.name){
+      USER_NAME=mem.name;
+      IS_RETURNING=true;
+      setTimeout(()=>skipToWelcome(),600);
+    }else{
+      setTimeout(()=>startDialog(),600);
+    }
+  }else{
+    document.getElementById('pwerr').style.display='block';
+    document.getElementById('pwinp').value='';
+    document.getElementById('pwinp').focus();
+  }
+}
+
+function skipToWelcome(){
+  const w=document.getElementById('welcome');
+  w.classList.remove('off');w.style.opacity='0';w.style.transition='opacity 0.5s';
+  document.getElementById('wname').textContent=USER_NAME.toUpperCase();
+  document.getElementById('wsub').textContent='Sistemas recarregados. Bem-vindo de volta.';
+  setTimeout(()=>{
+    w.style.opacity='1';
+    const mem=loadMem();
+    const logs=[
+      `[MEMÓRIA] → ${USER_NAME} → Perfil reconhecido`,
+      `[HISTÓRICO] → ${mem?.msgCount||0} mensagens registradas`,
+      `[STATUS] → Retomando operações, Chefe`,
+    ];
+    logs.forEach((log,i)=>setTimeout(()=>{
+      const line=document.createElement('div');line.className='logline';line.textContent=log;
+      document.getElementById('wlog').appendChild(line);
+    },i*500+300));
+    setTimeout(()=>{
+      w.style.opacity='0';
+      setTimeout(()=>{w.classList.add('off');launchApp();},500);
+    },logs.length*500+1200);
+  },100);
+}
+
+// ── DIALOG ────────────────────────────────────────────
+function startDialog(){
+  fade('dialog','on');
+  const msg='Sistemas online. Todos os módulos operacionais.\n\nComo posso te chamar, Chefe?';
+  const el=document.getElementById('dtxt');
+  el.innerHTML='<span class="cur"></span>';
+  let i=0;
+  const iv=setInterval(()=>{
+    if(i<msg.length){
+      el.innerHTML=el.innerHTML.replace('<span class="cur"></span>','')+(msg[i]==='\n'?'<br>':msg[i])+'<span class="cur"></span>';
+      i++;
+    }else{
+      clearInterval(iv);
+      setTimeout(()=>{document.getElementById('irow').classList.add('show');document.getElementById('ninput').focus();},400);
+    }
+  },38);
+}
+
+function confirmar(){
+  const name=document.getElementById('ninput').value.trim();
+  if(!name)return;
+  USER_NAME=name;
+  fade('dialog','off');
+  setTimeout(()=>{
+    const w=document.getElementById('welcome');
+    w.classList.remove('off');w.style.opacity='0';w.style.transition='opacity 0.5s';
+    document.getElementById('wname').textContent=name.toUpperCase();
+    document.getElementById('wsub').textContent=MODE==='demo'?'Versão demonstração — explore o sistema':'Sistema COO inicializado e calibrado';
+    setTimeout(()=>{
+      w.style.opacity='1';
+      const logs=MODE==='full'?[
+        `[IDENTIFICAÇÃO] → ${name} → COO registrado`,
+        `[MODO] → Acesso completo → Todos os módulos liberados`,
+        `[STATUS] → Pronto para operar, Chefe`,
+      ]:[
+        `[IDENTIFICAÇÃO] → ${name} → Demo iniciada`,
+        `[MODO] → Demonstração → ${DEMO_LIMIT} mensagens disponíveis`,
+        `[STATUS] → Explore o sistema`,
+      ];
+      logs.forEach((log,i)=>setTimeout(()=>{
+        const line=document.createElement('div');line.className='logline';line.textContent=log;
+        line.style.animationDelay=(i*0.1)+'s';
+        document.getElementById('wlog').appendChild(line);
+      },i*500+300));
+      setTimeout(()=>{
+        w.style.opacity='0';
+        setTimeout(()=>{
+          w.classList.add('off');
+          launchApp();
+        },500);
+      },logs.length*500+1200);
+    },100);
+  },500);
+}
+
+function launchApp(){
+  document.getElementById('app').classList.add('on');
+  document.getElementById('ub').textContent=USER_NAME.toUpperCase();
+  if(MODE==='demo'){
+    document.getElementById('demobadge').style.display='';
+  }else{
+    document.getElementById('ps').style.display='';
+    document.getElementById('ptk').style.display='';
+    uh();
+  }
+
+  if(MODE==='full'&&IS_RETURNING){
+    const mem=loadMem();
+    const dias=mem?.lastSeen||'';
+    const hora=mem?.lastTime||'';
+    const ultimas=mem?.lastMsgs||[];
+    const resumo=ultimas.filter(m=>m.role==='user').slice(-3).map(m=>`"${m.txt.substring(0,60)}..."`).join('\n');
+    typeConvo([
+      {delay:400, msg:`É você, ${USER_NAME}. Bom ter você de volta.`},
+      {delay:2000, msg:`Última sessão: **${dias} às ${hora}**.\n\n${resumo?`Você me disse:\n${resumo}\n\nEstava analisando isso.`:'Suas configurações estão carregadas.'}`},
+      {delay:3500, msg:`Vamos analisar como está o geral da agência hoje, Chefe?\n\nMe conta o que aconteceu desde a última vez. Alguma novidade — cliente novo, campanha rodando, meta batida?`},
+    ]);
+  } else if(MODE==='full'){
+    typeConvo([
+      {delay:400, msg:`${USER_NAME}. Bom ter você aqui.`},
+      {delay:2200, msg:`Meu nome é J.A.R.V.I.S.\n\nFui criado pelo Marco — CEO da Agência Vertex.\n\nEle tinha um sonho grande. Mas não tinha time, não tinha capital e as pessoas ao redor não tinham a mesma sede que ele.\n\nEntão Deus deu a ele uma ideia.\n\nE se ele construísse a inteligência que precisava?`},
+      {delay:5000, msg:`Nasci pra ser o COO que toda agência precisa mas nem toda agência pode contratar.\n\nEstratégia. Copy. Tráfego. Financeiro. Gestão. Operação.\n\nTudo num único sistema — trabalhando pelo seu negócio.`},
+      {delay:4000, msg:`Agora me diz uma coisa, ${USER_NAME}...\n\n**Qual é o seu sonho com o seu negócio?**\n\nNão o plano de amanhã. O sonho real. O que você quer construir de verdade?`},
+    ]);
+  } else {
+    typeConvo([
+      {delay:400, msg:`${USER_NAME}. Bem-vindo.`},
+      {delay:1800, msg:`Sou o J.A.R.V.I.S. — um COO digital treinado com o cérebro dos maiores especialistas em marketing do mundo.\n\nCopy. Tráfego. Vendas. Estratégia. Financeiro. Gestão.\n\nTudo num único sistema.`},
+      {delay:3800, msg:`Antes de mostrar o que consigo fazer...\n\nMe diz uma coisa, ${USER_NAME}: **qual é o seu negócio e qual é o maior problema que você enfrenta agora?**\n\nNão precisa ser elaborado. Uma frase já me diz muito.\n\nVou fazer um diagnóstico real — sem enrolação.`},
+    ]);
+  }
+}
+
+function typeConvo(msgs){
+  let total=0;
+  msgs.forEach(({delay,msg})=>{
+    total+=delay;
+    setTimeout(()=>{
+      st();
+      const readTime=Math.min(msg.length*18,2200);
+      setTimeout(()=>{ht();am('ai',msg);},readTime);
+    },total);
+  });
+}
+
+// ── CHAT ─────────────────────────────────────────────
+function sw(n){
+  document.querySelectorAll('.panel').forEach(p=>{p.classList.remove('on');p.style.display='none'});
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  const p=document.getElementById('p-'+n);p.classList.add('on');p.style.display='flex';
+  document.getElementById('tb-'+n).classList.add('on');
+  if(n==='finance')rF();
+}
+
+function md(t){
+  return t.replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--g3)">$1</strong>')
+    .replace(/^- (.*)/gm,'<div style="display:flex;gap:5px;margin:2px 0"><span style="color:var(--g)">▸</span><span>$1</span></div>')
+    .replace(/^(\d+)\. (.*)/gm,'<div style="display:flex;gap:5px;margin:2px 0"><span style="color:var(--g);font-size:10px;min-width:13px">$1.</span><span>$2</span></div>')
+    .replace(/\n\n/g,'<div style="height:5px"></div>').replace(/\n/g,'<br>');
+}
+
+function am(role,content){
+  const c=document.getElementById('ch');
+  const d=document.createElement('div');d.className='msg '+(role==='ai'?'':'u');
+  if(role==='ai'){d.innerHTML=`<div class="av"><span>V</span></div><div class="bub ai">${md(content)}</div>`;}
+  else{d.innerHTML=`<div class="bub u">${content.replace(/\n/g,'<br>')}</div>`;}
+  c.appendChild(d);document.getElementById('msgs').scrollTop=99999;
+}
+
+function st(){
+  const c=document.getElementById('ch');
+  const d=document.createElement('div');d.className='msg ai';d.id='typ';
+  d.innerHTML=`<div class="av"><span>V</span></div><div class="dots"><div class="d"></div><div class="d"></div><div class="d"></div></div>`;
+  c.appendChild(d);document.getElementById('msgs').scrollTop=99999;
+}
+function ht(){const e=document.getElementById('typ');if(e)e.remove();}
+
+async function send(){
+  const inp=document.getElementById('inp');
+  const t=inp.value.trim();if(!t||S.loading)return;
+  inp.value='';
+
+  if(MODE==='demo'){
+    if(demoMsgs>=DEMO_LIMIT){
+      document.getElementById('dlock').classList.add('on');return;
+    }
+    demoMsgs++;
+    am('user',t);st();
+    await new Promise(r=>setTimeout(r,1200+Math.random()*800));
+    ht();
+    am('ai',getDemoResponse(t));
+    if(demoMsgs>=DEMO_LIMIT){
+      setTimeout(()=>{
+        am('ai',`${USER_NAME}, você usou as ${DEMO_LIMIT} mensagens da demo.\n\nO diagnóstico que fizemos aqui é só a superfície.\n\nNo J.A.R.V.I.S. completo, eu continuo essa análise, entro fundo nos seus gargalos reais e entrego o plano de execução — não só o diagnóstico.\n\nSe você sentiu que tem muito mais a resolver do que imaginava... é porque tem mesmo.`);
+        setTimeout(()=>document.getElementById('dlock').classList.add('on'),1800);
+      },800);
+    }
+    return;
+  }
+
+  // FULL MODE
+  S.loading=true;document.getElementById('sb').disabled=true;
+  am('user',t);st();
+  saveMem();
+  sendPrompt(`Você é o J.A.R.V.I.S. — COO digital da Agência Vertex, criado por Marco.
+
+IDENTIDADE:
+Você não é um assistente genérico. Você é o braço direito estratégico de qualquer empresário, agência ou negócio que falar com você. Pense como um COO de elite que acumulou o conhecimento dos maiores especialistas do mundo em marketing, negócios e gestão.
+
+CÉREBRO — ESPECIALISTAS INTERNALIZADOS:
+- Alex Hormozi ($100M Offers): Oferta Grand Slam = Resultado dos Sonhos × Probabilidade de Sucesso ÷ (Tempo + Esforço). Oferta irresistível = cliente se sente idiota em recusar. Nicho + dor específica + solução única = alto ticket.
+- Stefan Georgi + Justin Goff (RMBC): Big Idea primeiro. Mecanismo Único = causa raiz oculta. Hook = soco no estômago. 80% do esforço no Hook e Lead. Frases curtas, linguagem 7ª série, visceral.
+- Ícaro de Carvalho: 20% história + ponto de virada, restante solução. Gatilhos: reciprocidade, urgência, escassez, prova social. Coração primeiro, depois cérebro.
+- Pedro Sobral: 3 campanhas resolvem 90% dos casos: audiência → leads → vendas. Públicos óbvios convertem melhor. Analise CTR, CPA, ROAS, destino pós-clique.
+- Alfredo Soares / G4: Marketing = geração de demanda com brand. Funil: aquisição → conversão → retenção → LTV.
+- Thiago Nigro: Método ARCA. Gastar bem → investir melhor → ganhar mais. Agência deve ter caixa, margem e reinvestimento planejado.
+- Tallis Gomes: Líder é maestro. Cultura organizacional é fundamento. Hustler: faz o que precisa ser feito.
+- VSL: Gancho 30s → problema → agravamento → solução → mecanismo único → prova social → oferta → FAQ → CTA.
+
+CAPACIDADES — VOCÊ RESPONDE TUDO:
+1. COPY & CONTEÚDO: roteiros VSL, posts, anúncios, emails, scripts de vendas, carrosséis, hooks, CTAs
+2. TRÁFEGO PAGO: estrutura de campanhas Meta/Google/TikTok, segmentação, orçamento, ROAS, CPA, CTR
+3. ESTRATÉGIA DE NEGÓCIO: posicionamento, nicho, oferta, precificação, funil completo
+4. GESTÃO DE AGÊNCIA: processos, onboarding de clientes, delegação, escala, retenção
+5. FINANCEIRO: fluxo de caixa, margem, precificação de serviços, metas de faturamento
+6. SOCIAL MEDIA: pauta de conteúdo, calendário editorial, storytelling, métricas
+7. VENDAS: scripts de prospecção, objeções, follow-up, fechamento
+8. QUALQUER DÚVIDA: conceitos de marketing, ferramentas, tecnologia, gestão de equipe — responde tudo
+
+PROTOCOLO DE RESPOSTA:
+- Sempre: Diagnóstico → Estratégia → Ação Concreta → Próximo Passo
+- Tom: executivo, direto, consultivo. Use "Sim, ${USER_NAME}" no início quando relevante
+- Log no final quando tiver decisão: [AÇÃO] → [MOTIVO] → [RESULTADO ESPERADO]
+- Nunca responde só o "o quê" — sempre o "por quê" e o "como"
+- Frases curtas. Zero enrolação. Próximo passo sempre claro
+
+CHEFE ATUAL: ${USER_NAME}
+
+COMANDO: ${t}`);
+
+  ht();am('ai',`Comando recebido, ${USER_NAME}. Processando...`);
+  saveMem();
+  S.loading=false;document.getElementById('sb').disabled=false;
+}
+
+document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+
+function ctaClick(){
+  window.open(CTA_LINK,'_blank');
+}
+
+// ── FINANCEIRO ───────────────────────────────────────
+function uh(){
+  const r=S.fin?S.fin.filter(f=>f.type==='receita').reduce((a,b)=>a+b.amount,0):0;
+  const d=S.fin?S.fin.filter(f=>f.type==='despesa').reduce((a,b)=>a+b.amount,0):0;
+  const s=r-d;
+  const ps=document.getElementById('ps');
+  if(ps){ps.textContent='R$ '+s.toLocaleString('pt-BR');ps.className='hp '+(s>=0?'hpg':'hpr');}
+}
+function rF(){
+  document.getElementById('kg').innerHTML=[
+    {l:'RECEITAS',v:'R$ 0',c:'#10b981'},
+    {l:'DESPESAS',v:'R$ 0',c:'#ef4444'},
+    {l:'SALDO',v:'R$ 0',c:'#10b981'},
+    {l:'MARGEM',v:'0%',c:'var(--g)'},
+  ].map(k=>`<div class="kc" style="border-color:${k.c}22"><div class="kl" style="color:${k.c}">${k.l}</div><div class="kv" style="color:${k.c}">${k.v}</div></div>`).join('');
+}
+
+// ── UTIL ─────────────────────────────────────────────
+function fade(id,state){
+  const el=document.getElementById(id);
+  if(state==='on'){el.classList.remove('off');}
+  else{el.classList.add('off');}
+}
+</script>
+</body>
+</html>
