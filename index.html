@@ -9,7 +9,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--g:#1a7a3a;--g2:#0d5a28;--g3:#2aaa5a;--bg:#060910;--s1:#0a0f0a;--s2:#0d120d;--border:rgba(26,122,58,0.15);--border2:rgba(26,122,58,0.3);--text:#c8e8c8;--muted:rgba(200,232,200,0.4);--dim:rgba(26,122,58,0.35)}
 body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;height:100vh}
-
+ 
 /* GRID + SCAN */
 .grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
 .scanline{position:fixed;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(26,122,58,0.4),transparent);animation:scan 4s linear infinite;z-index:1;pointer-events:none}
@@ -19,11 +19,11 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 .ctr{top:14px;right:14px;border-top:1px solid var(--g);border-right:1px solid var(--g)}
 .cbl{bottom:14px;left:14px;border-bottom:1px solid var(--g);border-left:1px solid var(--g)}
 .cbr{bottom:14px;right:14px;border-bottom:1px solid var(--g);border-right:1px solid var(--g)}
-
+ 
 /* SCREENS */
 .screen{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s ease}
 .screen.off{opacity:0;pointer-events:none}
-
+ 
 /* BOOT */
 #boot .content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
 .hex-wrap{position:relative;margin-bottom:28px}
@@ -42,7 +42,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 .bbar{height:1px;background:rgba(26,122,58,0.12);overflow:hidden}
 .bfill{height:100%;background:linear-gradient(90deg,var(--g2),var(--g),var(--g3));width:0;transition:width 0.5s ease}
 @keyframes fU{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
+ 
 /* MODE SELECT */
 #modesel .box{background:rgba(6,9,16,0.96);border:0.5px solid var(--border2);border-radius:12px;padding:32px 28px;width:100%;max-width:400px;position:relative;z-index:2}
 #modesel .mhex{width:44px;height:44px;background:linear-gradient(135deg,var(--g),var(--g2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
@@ -55,7 +55,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 .mode-demo{background:transparent;border:0.5px solid var(--border2);color:var(--dim)}
 .mode-demo:hover{border-color:var(--g);color:var(--g)}
 .mode-sep{font-size:9px;color:var(--dim);text-align:center;letter-spacing:2px;margin:4px 0 10px;font-family:'Orbitron',sans-serif}
-
+ 
 /* PASSWORD */
 #pwscreen .box{background:rgba(6,9,16,0.96);border:0.5px solid var(--border2);border-radius:12px;padding:32px 28px;width:100%;max-width:380px;position:relative;z-index:2}
 #pwscreen h2{font-family:'Orbitron',sans-serif;font-size:10px;color:var(--g);letter-spacing:3px;text-align:center;margin-bottom:20px}
@@ -65,7 +65,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 .pw-btn{width:100%;padding:11px;background:linear-gradient(135deg,var(--g),var(--g2));border:none;border-radius:6px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all 0.2s}
 .pw-btn:hover{box-shadow:0 0 20px rgba(26,122,58,0.3);transform:scale(1.01)}
 .pw-err{font-size:10px;color:#ef4444;text-align:center;letter-spacing:1px;margin-top:8px;display:none;font-family:'Orbitron',sans-serif}
-
+ 
 /* DIALOG */
 #dialog .box{background:rgba(6,9,16,0.96);border:0.5px solid var(--border2);border-left:2px solid var(--g);border-radius:0 10px 10px 10px;padding:20px 22px;width:100%;max-width:460px;position:relative;z-index:2}
 #dialog .dhex-w{position:relative;margin:0 auto 24px;width:56px}
@@ -82,7 +82,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 .ni::placeholder{color:var(--dim)}
 .cb{padding:11px 18px;background:linear-gradient(135deg,var(--g),var(--g2));border:none;border-radius:6px;color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all 0.2s}
 .cb:hover{box-shadow:0 0 15px rgba(26,122,58,0.3)}
-
+ 
 /* WELCOME */
 #welcome .content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center}
 .whex{width:70px;height:70px;background:linear-gradient(135deg,var(--g),var(--g2));clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:0 0 50px rgba(26,122,58,0.5);animation:hexG 2s ease infinite alternate}
@@ -92,7 +92,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 .wsub{font-size:12px;color:rgba(200,232,200,0.3);letter-spacing:2px;margin-bottom:32px}
 .wlog{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1px;color:var(--dim);text-align:left;width:340px}
 .logline{margin-bottom:5px;animation:fU 0.4s ease both}
-
+ 
 /* MAIN APP */
 #app{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.5s}
 #app.on{opacity:1;pointer-events:all}
@@ -107,10 +107,10 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 .hpr{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.25);color:#ef4444}
 .hpa{background:rgba(26,122,58,0.08);border-color:var(--border2);color:var(--g)}
 .ub{padding:2px 8px;background:rgba(26,122,58,0.08);border:0.5px solid var(--border2);border-radius:3px;font-size:9px;color:var(--g);letter-spacing:1px;font-weight:600;font-family:'Orbitron',sans-serif}
-
+ 
 /* DEMO BADGE */
 .demo-badge{background:rgba(250,159,23,0.12);border:0.5px solid rgba(250,159,23,0.3);color:#f59e0b;padding:2px 8px;border-radius:3px;font-size:9px;font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:1px}
-
+ 
 #tabs{display:flex;border-bottom:0.5px solid var(--border);flex-shrink:0;background:var(--s1);position:relative;z-index:2}
 .tb{padding:8px 12px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--dim);cursor:pointer;font-size:10px;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;transition:all 0.2s;text-transform:uppercase}
 .tb:hover{color:var(--g)}
@@ -142,7 +142,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 #sb:hover:not(:disabled){transform:scale(1.05);box-shadow:0 0 15px rgba(26,122,58,0.3)}
 #sb:disabled{opacity:0.3;cursor:not-allowed}
 .ih{font-size:9px;color:var(--dim);text-align:center;margin-top:4px;letter-spacing:1px;font-family:'Rajdhani',sans-serif}
-
+ 
 /* DEMO LOCK OVERLAY */
 #dlock{position:absolute;inset:0;background:rgba(6,9,16,0.92);z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;backdrop-filter:blur(4px)}
 #dlock.on{display:flex}
@@ -155,7 +155,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 .cta-btn:hover{box-shadow:0 0 25px rgba(26,122,58,0.45);transform:scale(1.02)}
 .cta-back{background:transparent;border:0.5px solid var(--border2);color:var(--dim);padding:10px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:9px;cursor:pointer;width:100%;letter-spacing:1px;transition:all 0.2s}
 .cta-back:hover{border-color:var(--g);color:var(--g)}
-
+ 
 /* TABS EXTRA */
 .psc{flex:1;overflow-y:auto;padding:14px}
 .pin{max-width:680px;margin:0 auto}
@@ -173,7 +173,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
 <div class="scanline"></div>
 <div class="corner ctl"></div><div class="corner ctr"></div>
 <div class="corner cbl"></div><div class="corner cbr"></div>
-
+ 
 <!-- BOOT -->
 <div class="screen" id="boot">
   <div class="content">
@@ -189,7 +189,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
     </div>
   </div>
 </div>
-
+ 
 <!-- MODE SELECT -->
 <div class="screen off" id="modesel">
   <div class="box">
@@ -200,7 +200,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
     <div style="font-size:9px;color:rgba(26,122,58,0.18);text-align:center;margin-top:8px;letter-spacing:1px;font-family:'Orbitron',sans-serif">AGÊNCIA VERTEX · COO SYSTEM</div>
   </div>
 </div>
-
+ 
 <!-- PASSWORD -->
 <div class="screen off" id="pwscreen">
   <div class="box">
@@ -210,7 +210,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
     <div class="pw-err" id="pwerr">Acesso negado. Tente novamente.</div>
   </div>
 </div>
-
+ 
 <!-- DIALOG -->
 <div class="screen off" id="dialog">
   <div class="box" style="max-width:460px;width:100%;margin:0 20px">
@@ -223,7 +223,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
     </div>
   </div>
 </div>
-
+ 
 <!-- WELCOME -->
 <div class="screen off" id="welcome">
   <div class="content">
@@ -234,7 +234,7 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
     <div class="wlog" id="wlog"></div>
   </div>
 </div>
-
+ 
 <!-- MAIN APP -->
 <div id="app">
   <div id="hdr">
@@ -301,13 +301,13 @@ body{background:var(--bg);font-family:'Rajdhani',sans-serif;overflow:hidden;heig
     </div>
   </div>
 </div>
-
+ 
 <script>
 // ── CONFIG ──────────────────────────────────────────
 const SENHA = 'vertex2025';
 const CTA_LINK = 'https://wa.me/5538999999999?text=Quero+o+J.A.R.V.I.S.+completo';
 const MEM_KEY = 'jarvis_vertex_mem';
-
+ 
 // ── STATE ────────────────────────────────────────────
 let MODE='';
 let USER_NAME='';
@@ -315,7 +315,7 @@ let IS_RETURNING=false;
 let demoMsgs=0;
 const DEMO_LIMIT=5;
 let S={tasks:[],fin:[],loading:false};
-
+ 
 // ── MEMÓRIA ──────────────────────────────────────────
 function saveMem(){
   if(MODE!=='full')return;
@@ -334,15 +334,15 @@ function saveMem(){
   };
   try{localStorage.setItem(MEM_KEY,JSON.stringify(mem));}catch(e){}
 }
-
+ 
 function loadMem(){
   try{const d=localStorage.getItem(MEM_KEY);return d?JSON.parse(d):null;}catch(e){return null;}
 }
-
+ 
 function clearMem(){
   try{localStorage.removeItem(MEM_KEY);}catch(e){}
 }
-
+ 
 // ── DEMO RESPOSTAS PRÉ-PROGRAMADAS ───────────────────
 const DEMO_RESPONSES=[
   {
@@ -366,27 +366,44 @@ const DEMO_RESPONSES=[
     res:`Diagnóstico estratégico iniciado.\n\n**O PROBLEMA REAL** — Todo negócio que trava trava no mesmo ponto: o dono está operando no nível errado. Fazendo o trabalho que deveria delegar, tomando decisões que deveriam ser processos, resolvendo problemas que não deveriam existir.\n\n**OS 3 GARGALOS MAIS COMUNS** — Falta de processo (tudo depende de você). Falta de posicionamento (concorre por preço). Falta de previsibilidade (não sabe de onde vem o próximo cliente).\n\nQual desses três soa mais verdadeiro para o seu momento?\n\n**O QUE O COMPLETO FAZ** — No J.A.R.V.I.S. completo, montamos o diagnóstico completo do seu negócio, identificamos o gargalo principal e traçamos o plano de 90 dias para sair do caos e entrar em escala.\n\nMe conta: qual é o maior problema operacional que você enfrenta hoje?\n\n[ESTRATÉGIA]→[GARGALO IDENTIFICADO]→[VERSÃO COMPLETA RESOLVE ISSO]`
   }
 ];
-
+ 
 function getDemoResponse(msg){
   const m=msg.toLowerCase();
   for(const r of DEMO_RESPONSES){
     if(r.keys.some(k=>m.includes(k))) return r.res;
   }
-  return `Diagnóstico iniciado, ${USER_NAME||'Chefe'}.\n\n**ANÁLISE PRELIMINAR** — Recebi sua pergunta. Para dar um diagnóstico preciso, preciso entender melhor o contexto do seu negócio.\n\nMe diz: qual é o seu segmento, qual é o seu produto ou serviço, e qual é o principal obstáculo que está travando o crescimento agora?\n\nCom isso, consigo identificar o gargalo real — não a causa aparente.\n\n**O QUE O COMPLETO FAZ** — Na versão completa, tenho acesso ao histórico do seu negócio, posso cruzar dados de copy, tráfego, financeiro e estratégia para dar um diagnóstico integrado — não uma resposta isolada.\n\n[ANÁLISE]→[CONTEXTO NECESSÁRIO]→[VERSÃO COMPLETA É MAIS PRECISA]`;
+  // Detecta qualquer mensagem sobre negócio, processo, conteúdo, psicologia, etc.
+  // e roteia para a resposta de estratégia como padrão inteligente
+  const isStrategy = m.length > 5; // qualquer mensagem com conteúdo real
+  if(isStrategy){
+    // Roteia para a resposta mais próxima baseada em palavras-chave secundárias
+    if(m.match(/conteúdo|content|post|instagram|youtube|tiktok|reels|vídeo|video|criação|autoconhecimento|psicologia|nicho|marca|branding|posicionamento/i))
+      return DEMO_RESPONSES.find(r=>r.keys.includes('copy')).res;
+    if(m.match(/processo|sistema|organizar|gestão|time|equipe|delegar|escalar|crescer|operação|rotina/i))
+      return DEMO_RESPONSES.find(r=>r.keys.includes('estratégia')).res;
+    if(m.match(/venda|fechar|proposta|reunião|objeção|preço|cobrar|contrato|pitch/i))
+      return DEMO_RESPONSES.find(r=>r.keys.includes('cliente')).res;
+    if(m.match(/impulsionar|alcance|seguidores|engajamento|orgânico|pago|boost/i))
+      return DEMO_RESPONSES.find(r=>r.keys.includes('tráfego')).res;
+    // Qualquer outra coisa → estratégia
+    return DEMO_RESPONSES.find(r=>r.keys.includes('estratégia')).res;
+  }
+  return DEMO_RESPONSES.find(r=>r.keys.includes('estratégia')).res;
 }
-
+}
+ 
 // ── BOOT ──────────────────────────────────────────────
 const bsteps=[[0,0],[400,22],[900,50],[1500,75],[2100,93],[2700,100]];
 bsteps.forEach(([d,v])=>setTimeout(()=>{
   document.getElementById('bfill').style.width=v+'%';
   document.getElementById('pct').textContent=v+'%';
 },d+300));
-
+ 
 setTimeout(()=>{
   fade('boot','off');
   setTimeout(()=>fade('modesel','on'),600);
 },3600);
-
+ 
 // ── MODE SELECT ──────────────────────────────────────
 let hexClicks=0;let hexTimer=null;
 function hexClick(){
@@ -407,7 +424,7 @@ function goDemo(){
   fade('modesel','off');
   setTimeout(()=>startDialog(),600);
 }
-
+ 
 // ── PASSWORD ─────────────────────────────────────────
 function checkPw(){
   const v=document.getElementById('pwinp').value;
@@ -429,7 +446,7 @@ function checkPw(){
     document.getElementById('pwinp').focus();
   }
 }
-
+ 
 function skipToWelcome(){
   const w=document.getElementById('welcome');
   w.classList.remove('off');w.style.opacity='0';w.style.transition='opacity 0.5s';
@@ -453,7 +470,7 @@ function skipToWelcome(){
     },logs.length*500+1200);
   },100);
 }
-
+ 
 // ── DIALOG ────────────────────────────────────────────
 function startDialog(){
   fade('dialog','on');
@@ -471,7 +488,7 @@ function startDialog(){
     }
   },38);
 }
-
+ 
 function confirmar(){
   const name=document.getElementById('ninput').value.trim();
   if(!name)return;
@@ -508,7 +525,7 @@ function confirmar(){
     },100);
   },500);
 }
-
+ 
 function launchApp(){
   document.getElementById('app').classList.add('on');
   document.getElementById('ub').textContent=USER_NAME.toUpperCase();
@@ -519,7 +536,7 @@ function launchApp(){
     document.getElementById('ptk').style.display='';
     uh();
   }
-
+ 
   if(MODE==='full'&&IS_RETURNING){
     const mem=loadMem();
     const dias=mem?.lastSeen||'';
@@ -546,7 +563,7 @@ function launchApp(){
     ]);
   }
 }
-
+ 
 function typeConvo(msgs){
   let total=0;
   msgs.forEach(({delay,msg})=>{
@@ -558,7 +575,7 @@ function typeConvo(msgs){
     },total);
   });
 }
-
+ 
 // ── CHAT ─────────────────────────────────────────────
 function sw(n){
   document.querySelectorAll('.panel').forEach(p=>{p.classList.remove('on');p.style.display='none'});
@@ -567,14 +584,14 @@ function sw(n){
   document.getElementById('tb-'+n).classList.add('on');
   if(n==='finance')rF();
 }
-
+ 
 function md(t){
   return t.replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--g3)">$1</strong>')
     .replace(/^- (.*)/gm,'<div style="display:flex;gap:5px;margin:2px 0"><span style="color:var(--g)">▸</span><span>$1</span></div>')
     .replace(/^(\d+)\. (.*)/gm,'<div style="display:flex;gap:5px;margin:2px 0"><span style="color:var(--g);font-size:10px;min-width:13px">$1.</span><span>$2</span></div>')
     .replace(/\n\n/g,'<div style="height:5px"></div>').replace(/\n/g,'<br>');
 }
-
+ 
 function am(role,content){
   const c=document.getElementById('ch');
   const d=document.createElement('div');d.className='msg '+(role==='ai'?'':'u');
@@ -582,7 +599,7 @@ function am(role,content){
   else{d.innerHTML=`<div class="bub u">${content.replace(/\n/g,'<br>')}</div>`;}
   c.appendChild(d);document.getElementById('msgs').scrollTop=99999;
 }
-
+ 
 function st(){
   const c=document.getElementById('ch');
   const d=document.createElement('div');d.className='msg ai';d.id='typ';
@@ -590,12 +607,12 @@ function st(){
   c.appendChild(d);document.getElementById('msgs').scrollTop=99999;
 }
 function ht(){const e=document.getElementById('typ');if(e)e.remove();}
-
+ 
 async function send(){
   const inp=document.getElementById('inp');
   const t=inp.value.trim();if(!t||S.loading)return;
   inp.value='';
-
+ 
   if(MODE==='demo'){
     if(demoMsgs>=DEMO_LIMIT){
       document.getElementById('dlock').classList.add('on');return;
@@ -613,16 +630,16 @@ async function send(){
     }
     return;
   }
-
+ 
   // FULL MODE
   S.loading=true;document.getElementById('sb').disabled=true;
   am('user',t);st();
   saveMem();
   sendPrompt(`Você é o J.A.R.V.I.S. — COO digital da Agência Vertex, criado por Marco.
-
+ 
 IDENTIDADE:
 Você não é um assistente genérico. Você é o braço direito estratégico de qualquer empresário, agência ou negócio que falar com você. Pense como um COO de elite que acumulou o conhecimento dos maiores especialistas do mundo em marketing, negócios e gestão.
-
+ 
 CÉREBRO — ESPECIALISTAS INTERNALIZADOS:
 - Alex Hormozi ($100M Offers): Oferta Grand Slam = Resultado dos Sonhos × Probabilidade de Sucesso ÷ (Tempo + Esforço). Oferta irresistível = cliente se sente idiota em recusar. Nicho + dor específica + solução única = alto ticket.
 - Stefan Georgi + Justin Goff (RMBC): Big Idea primeiro. Mecanismo Único = causa raiz oculta. Hook = soco no estômago. 80% do esforço no Hook e Lead. Frases curtas, linguagem 7ª série, visceral.
@@ -632,7 +649,7 @@ CÉREBRO — ESPECIALISTAS INTERNALIZADOS:
 - Thiago Nigro: Método ARCA. Gastar bem → investir melhor → ganhar mais. Agência deve ter caixa, margem e reinvestimento planejado.
 - Tallis Gomes: Líder é maestro. Cultura organizacional é fundamento. Hustler: faz o que precisa ser feito.
 - VSL: Gancho 30s → problema → agravamento → solução → mecanismo único → prova social → oferta → FAQ → CTA.
-
+ 
 CAPACIDADES — VOCÊ RESPONDE TUDO:
 1. COPY & CONTEÚDO: roteiros VSL, posts, anúncios, emails, scripts de vendas, carrosséis, hooks, CTAs
 2. TRÁFEGO PAGO: estrutura de campanhas Meta/Google/TikTok, segmentação, orçamento, ROAS, CPA, CTR
@@ -642,29 +659,29 @@ CAPACIDADES — VOCÊ RESPONDE TUDO:
 6. SOCIAL MEDIA: pauta de conteúdo, calendário editorial, storytelling, métricas
 7. VENDAS: scripts de prospecção, objeções, follow-up, fechamento
 8. QUALQUER DÚVIDA: conceitos de marketing, ferramentas, tecnologia, gestão de equipe — responde tudo
-
+ 
 PROTOCOLO DE RESPOSTA:
 - Sempre: Diagnóstico → Estratégia → Ação Concreta → Próximo Passo
 - Tom: executivo, direto, consultivo. Use "Sim, ${USER_NAME}" no início quando relevante
 - Log no final quando tiver decisão: [AÇÃO] → [MOTIVO] → [RESULTADO ESPERADO]
 - Nunca responde só o "o quê" — sempre o "por quê" e o "como"
 - Frases curtas. Zero enrolação. Próximo passo sempre claro
-
+ 
 CHEFE ATUAL: ${USER_NAME}
-
+ 
 COMANDO: ${t}`);
-
+ 
   ht();am('ai',`Comando recebido, ${USER_NAME}. Processando...`);
   saveMem();
   S.loading=false;document.getElementById('sb').disabled=false;
 }
-
+ 
 document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
-
+ 
 function ctaClick(){
   window.open(CTA_LINK,'_blank');
 }
-
+ 
 // ── FINANCEIRO ───────────────────────────────────────
 function uh(){
   const r=S.fin?S.fin.filter(f=>f.type==='receita').reduce((a,b)=>a+b.amount,0):0;
@@ -681,7 +698,7 @@ function rF(){
     {l:'MARGEM',v:'0%',c:'var(--g)'},
   ].map(k=>`<div class="kc" style="border-color:${k.c}22"><div class="kl" style="color:${k.c}">${k.l}</div><div class="kv" style="color:${k.c}">${k.v}</div></div>`).join('');
 }
-
+ 
 // ── UTIL ─────────────────────────────────────────────
 function fade(id,state){
   const el=document.getElementById(id);
